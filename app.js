@@ -26,6 +26,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/posts', postsRouter);
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -42,11 +44,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-var server = app.listen(8081, function () {
-  var host = server.address().address;
-  var port = server.address().port;
 
-  console.log("Example app listening at http://%s:%s", host, port)
-});
+const port = process.env.PORT || 5000;
+app.listen(port);
+
+console.log('App is listening on port ' + port);
 
 module.exports = app;
