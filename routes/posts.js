@@ -52,6 +52,7 @@ router.post('/', function (req, res) {
                     console.log(err);
                     res.send('failed')
                 } else {
+                    console.log(req.body);
                     res.send('Success');
                 }
             });
@@ -59,5 +60,33 @@ router.post('/', function (req, res) {
     });
 });
 
+/*UPDATE by id*/
+router.patch('/:id', function (req, res) {
+    try{
+        let collection = db.db('db').collection('posts');
+        collection.updateOne({_id:req.params.id},
+            {$set: {title:req.body.title, text:req.body.text} })
+            .then(result =>{
+                const { matchedCount, modifiedCount } = result;
+                if(matchedCount && modifiedCount) {
+                    console.log(`Successfully added a new review.`)}
+            });
 
+    }
+    catch (err) {
+        res.json({message:err});
+    }
+
+
+    if(err){
+        console.log(err);
+        res.send('Failed to update');
+    }
+    else {
+        let collection = db.db('db').collection('posts');
+        collection.updateOne({_id:req.params.id},
+            {$set: {title:req.body.title, text:req.body.text} })
+    }
+
+});
 module.exports = router;
