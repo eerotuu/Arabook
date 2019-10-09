@@ -2,33 +2,69 @@ const express = require('express');
 const router = express.Router();
 
 const MongoClient = require('mongodb').MongoClient;
+var mongodb = require('mongodb');
 const url = 'mongodb://localhost:27017/';
+
+const resFailed = (res) => {
+    res.json({message: 'Failed.'});
+}
 
 /* GET All. */
 router.get('/', function(req, res, next) {
+    let q = {};
+    if (Object.keys(req.query).length > 0) {
+        if(typeof req.query.name != 'undefined') {
+           q.name = new RegExp(req.query.name, 'i');
+        }
+        if(typeof req.query.title != 'undefined') {
+            q.title = new RegExp(req.query.title, 'i');
+        }
+        if(typeof req.query.text != 'undefined') {
+            q.text = new RegExp(req.query.text, 'i');
+        }
+        console.log(q)
+    }
     MongoClient.connect(url, function(err, db) {
         if (err) {
             console.log(err);
-            res.send('failed');
+            resFailed(res);
         } else {
             let collection = db.db('db').collection('posts');
-            collection.find({}).toArray(function(err, result) {
+            collection.find(q).toArray(function(err, result) {
                 if (err) {
                     console.log(err);
-                } else if(result) {
+                    resFailed();
+                } else if(result != null) {
                     res.json(result);
                 } else {
-                    res.send('failed');
+                    res.json({message: 'no results found'})
                 }
             });
         }
     });
+
 });
 
 /* GET by id */
 router.get('/:id', function(req, res, next) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            resFailed(res);
+        }
+        var dbo = db.db('db');
+        var query = {_id : new mongodb.ObjectID(req.params.id)};
+        dbo.collection('posts').findOne(query, function(err, result) {
+            if (err) {
+                resFailed(res);
+            } else if (result != null) {
+                res.json(result);
+            } else {
+                res.json({message: 'no results found'})
+            }
 
-    res.send('id: ' + req.params.id);
+            db.close();
+        });
+    });
 });
 
 /* POST */
@@ -60,33 +96,42 @@ router.post('/', function (req, res) {
     });
 });
 
+/* DELETE by id */
+router.delete('/:id', function (req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            console.log(err)
+        }
+        var dbo = db.db('db');
+        var query = { _id: new mongodb.ObjectID(req.params.id)};
+        dbo.collection('posts').deleteOne(query, function(err, result) {
+            if (err) {
+                console.log(err);
+                res.json({message: 'Failed'})
+            } else {
+                res.json({message: 'Post with id: ' + req.params.id + ' deleted.'});
+            }
+            db.close();
+        });
+    });
+});
+
 /*UPDATE by id*/
 router.patch('/:id', function (req, res) {
-    try{
-        let collection = db.db('db').collection('posts');
-        collection.updateOne({_id:req.params.id},
-            {$set: {title:req.body.title, text:req.body.text} })
-            .then(result =>{
-                const { matchedCount, modifiedCount } = result;
-                if(matchedCount && modifiedCount) {
-                    console.log(`Successfully added a new review.`)}
-            });
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db('db');
+        var query = { _id: new mongodb.ObjectID(req.params.id) };
+        var newvalues = { $set: req.body};
+        dbo.collection('posts').updateOne(query, newvalues, function(err, result) {
+            if (err) {
+                res.json({message: 'Failed'});
+            } else {
+                res.json({message: 'Post with id: ' + req.params.id + ' updated.'})
+            }
 
-    }
-    catch (err) {
-        res.json({message:err});
-    }
-
-
-    if(err){
-        console.log(err);
-        res.send('Failed to update');
-    }
-    else {
-        let collection = db.db('db').collection('posts');
-        collection.updateOne({_id:req.params.id},
-            {$set: {title:req.body.title, text:req.body.text} })
-    }
-
+            db.close();
+        });
+    });
 });
 module.exports = router;
