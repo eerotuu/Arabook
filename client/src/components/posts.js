@@ -19,21 +19,22 @@ class Posts extends Component {
         fetch('/api/posts')
             .then(res => res.json())
             .then(postList => this.setState({ postList }))
-    }
+    };
 
     render() {
         const { postList } = this.state;
 
         // check if there are any posts to render
-        if(typeof postList == 'undefined' || postList.size == 0) {
+        if(typeof postList == 'undefined' || postList.size === 0) {
             return (
                 <li>No posts yet</li>
             )
         }
 
         // map postList into post components
+        console.log(postList)
         const posts = () => postList.map(post =>
-            <Post post={post} comments={post.comments}/>
+            <Post key={post._id} post={post} comments={post.comments}/>
         )
 
         return (

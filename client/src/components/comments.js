@@ -13,8 +13,8 @@ const Comments = ({comments}) => {
     const rows = () => comments.map(c =>
         <ul>
             <li>{c.comment}</li>
-            <li>{c.nickname}</li>
-            <li>{c.timestamp}</li>
+            <li>{c.name}</li>
+            <li>{c.date}</li>
         </ul>
     )
 

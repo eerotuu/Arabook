@@ -1,4 +1,5 @@
 import React from 'react'
+import Badge from 'react-bootstrap/Badge'
 
 const Tags = ({tags}) => {
 
@@ -11,12 +12,12 @@ const Tags = ({tags}) => {
 
     // map all tags into elements
     const allTags = () => tags.map(tag =>
-        <b>{tag.tag} </b>
-    )
+        <Badge key={tag} variant='secondary' style={{marginRight: 5, marginBottom: "0.6em"}}>{tag}</Badge>
+    );
 
     return (
-        <li>{allTags()}</li>
+        <div>{allTags()}</div>
     )
-}
+};
 
 export default Tags

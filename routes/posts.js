@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
         }
         console.log(q)
     }
-    db.post.find(q).populate('comments').exec(function (err, posts) {
+    db.post.find(q).populate('comments').sort('-date').exec(function (err, posts) {
         if (err) {
             resFailed(res, err);
         }
