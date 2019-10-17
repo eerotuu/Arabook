@@ -2,9 +2,14 @@ import React from 'react'
 import Tags from './tags'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import {Modal} from "react-bootstrap";
+import Comments from "./comments";
+import AddComments from "./add-comments";
 
 const Post = ({post}) => {
+    const [modalShow, setModalShow] = React.useState(false);
     let commentsText = ' Comments';
+
     if(post.comments.length < 2) {
         if(post.comments.length < 1) {
             commentsText = 'No comments yet'
@@ -32,10 +37,50 @@ const Post = ({post}) => {
                 <a href={post.link}>{post.link}</a>
                 <img src={post.image} alt="" style={{marginBottom: "1em"}}/>
                 <Tags tags={post.tags} />
-                <Button variant="primary">{commentsText}</Button>
+                <Button variant="primary" onClick={() => setModalShow(true)}>{commentsText}</Button>
             </Card.Body>
+
+            <CreatePostModal
+                show={modalShow}
+                onHide={() => {
+                    setModalShow(false);
+                }}
+
+                post = {post}
+            />
         </Card>
+
     )
 };
+
+function CreatePostModal(props){
+    let post = props.post;
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    {props.post.title}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div>
+                    <div>{post.text}</div>
+                    <a href={post.link}>{post.link}</a>
+                    <img src={post.image} alt="" style={{marginBottom: "1em"}}/>
+                    <Tags tags={post.tags} />
+                </div>
+
+                <h5>Reply to this post</h5>
+                <AddComments addComments = {post.addComment} />
+                <Comments comments = {post.comments}/>
+            </Modal.Body>
+        </Modal>
+    );
+}
 
 export default Post

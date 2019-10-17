@@ -26,6 +26,7 @@ class PostForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        this.state.tags = this.state.tags.split(',');
         fetch('/api/posts', {
             method: 'POST',
             headers: {
@@ -60,7 +61,7 @@ class PostForm extends React.Component {
                     <Form.Control name="image"  type="text" placeholder="Image (optional)" value={this.state.image} onChange={this.handleChange} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Control name="tags"  type="text" placeholder="Tags (optional)" value={this.state.tags} onChange={this.handleChange} />
+                    <Form.Control name="tags"  type="text" placeholder="Tags - separate with , (optional)" value={this.state.tags} onChange={this.handleChange} />
                 </Form.Group>
                 <Button type="submit">Create</Button>
             </Form>

@@ -17,7 +17,7 @@ function App() {
 
         <Navbar bg="dark" variant="dark">
             <Form inline className="justify-content-center" style={{width: "100%"}}>
-                <Button variant="outline-info" style={{marginRight: "0.5em"}} onClick={() => setModalShow(true)}>Crate new post</Button>
+                <Button variant="outline-info" style={{marginRight: "0.5em"}} onClick={() => setModalShow(true)}>Create new post</Button>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" style={{width: "40%", minWidth: 300}} />
                 <Button variant="outline-info">Search</Button>
             </Form>
