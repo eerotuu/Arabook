@@ -38,6 +38,30 @@ router.get('/', function (req, res, next) {
     });
 });
 
+/*GET comments from post*/
+router.get('/:id/comments', function (req, res, next) {
+    let query = {};
+    try {
+        query = {_id: new mongodb.ObjectID(req.params.id)};
+        db.post.findOne(query).populate('comments').exec(function (err, post) {
+            if (err) throw err;
+            console.log(post.comments);
+
+            if (post !== null) {
+                res.json(post.comments);
+            } else {
+                res.json({message: 'not results found'});
+            }
+        })
+    } catch (err) {
+        if (err) {
+            resFailed(res, err);
+        } else {
+            res.json({message: 'Invalid ObjectId format'});
+        }
+    }
+});
+
 /* GET by id */
 router.get('/:id', function (req, res, next) {
     let query = {};
@@ -62,7 +86,36 @@ router.get('/:id', function (req, res, next) {
     }
 });
 
-/* POST */
+/* POST comment*/
+router.post('/:id/comments', function (req, res) {
+    if (typeof req.body.date == 'undefined') {
+        req.body.date = new Date();
+    } else {
+        req.body.date = new Date(req.body.date);
+    }
+    
+    console.log(req.body);
+    
+    let comment = new db.comment(req.body);
+    comment.save(function (err, result) {
+        if (err) {
+            resFailed(res, err);
+        } else {
+            db.post.findOneAndUpdate(
+                {_id: new mongodb.ObjectID(req.params.id)},
+                {$push: {comments: comment._id}},
+                function (err, result) {
+                    console.log(err);
+                    res.json({message:"New Comment created", obj: comment});
+                }
+            );
+
+        }
+    });
+
+});
+
+/* POST post */
 router.post('/', function (req, res) {
 
     if (typeof req.body.date == 'undefined') {
