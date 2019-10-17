@@ -96,7 +96,12 @@ router.post('/:id/comments', function (req, res) {
     
     console.log(req.body);
     
-    let comment = new db.comment(req.body);
+
+    createComment(new mongodb.ObjectID(req.params.id), req.body);
+    res.send('asd');
+
+
+    /*
     comment.save(function (err, result) {
         if (err) {
             resFailed(res, err);
@@ -113,7 +118,26 @@ router.post('/:id/comments', function (req, res) {
         }
     });
 
+     */
+
 });
+
+async function createComment(postId, body) {
+
+    let comment = new db.comment(body);
+    let session = db.mongoose.startSession();
+
+    session.then(_session => {
+            session = _session;
+            // Start a transaction
+            session.startTransaction();
+    }).
+    then(() => comment.save()).
+    then(() => db.post.findOneAndUpdate (
+        {_id: postId},
+        {$push: {comments: comment._id}}
+    ).catch(() => session.abortTransaction()))
+}
 
 /* POST post */
 router.post('/', function (req, res) {
