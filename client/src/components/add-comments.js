@@ -10,8 +10,8 @@ class AddComments extends React.Component {
             name: '',
             comment: ''
         };
-        this.hide = props.onHide;
-        this.refreshList = props.refreshList
+        this.postId = props.postId;
+        this.setComments = props.setComments;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -24,7 +24,7 @@ class AddComments extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch('/api/posts', {
+        fetch('/api/posts/' + this.postId + '/comments', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -36,6 +36,12 @@ class AddComments extends React.Component {
         }, function(error) {
             console.log(error.message);
         })
+
+        fetch('/api/posts/' + this.postId + '/comments')
+            .then(res => res.json())
+            .then((result) => {
+                this.setComments(result);
+            },)
     }
 
     render() {

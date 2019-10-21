@@ -43,7 +43,7 @@ router.get('/:id/comments', function (req, res, next) {
     let query = {};
     try {
         query = {_id: new mongodb.ObjectID(req.params.id)};
-        db.post.findOne(query).populate('comments').exec(function (err, post) {
+        db.post.findOne(query).populate({path: 'comments', options: { sort: { 'date': -1 } } }).exec(function (err, post) {
             if (err) throw err;
             console.log(post.comments);
 

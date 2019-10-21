@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useState , useEffect} from 'react'
 import Card from "react-bootstrap/Card";
 import Toast from "react-bootstrap/Toast";
 
-const Comments = ({comments}) => {
+
+
+const Comments = ({postId, comments, setComments}) => {
+
+
+
+    const getList = () => {
+
+    };
+
+    useEffect(() => {
+        fetch('/api/posts/' + postId + '/comments')
+            .then(res => res.json())
+            .then((result) => {
+                setComments(result);
+            },)
+    }, []);
 
     // check if there isn't any comments yet.
     if(typeof comments == 'undefined') {

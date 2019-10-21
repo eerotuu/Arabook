@@ -34,7 +34,7 @@ class Posts extends Component {
         // map postList into post components
         console.log(postList)
         const posts = () => postList.map(post =>
-            <Post key={post._id} post={post} comments={post.comments}/>
+            <Post key={post._id} post={post} comments={post.comments} getList={this.getList}/>
         )
 
         return (

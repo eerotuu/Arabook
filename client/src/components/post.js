@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Tags from './tags'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
@@ -6,9 +6,10 @@ import {Modal} from "react-bootstrap";
 import Comments from "./comments";
 import AddComments from "./add-comments";
 
-const Post = ({post}) => {
+const Post = ({post, getList}) => {
     const [modalShow, setModalShow] = React.useState(false);
-    let commentsText = ' Comments';
+    const [comments, setComments] = useState([]);
+    let commentsText = '';
 
     if(post.comments.length < 2) {
         if(post.comments.length < 1) {
@@ -16,6 +17,8 @@ const Post = ({post}) => {
         } else {
             commentsText = post.comments.length + ' Comment'
         }
+    } else {
+        commentsText = post.comments.length + ' Comments'
     }
 
     let dateTime = new Date(post.date);
@@ -44,9 +47,12 @@ const Post = ({post}) => {
                 show={modalShow}
                 onHide={() => {
                     setModalShow(false);
+                    getList();
                 }}
 
                 post = {post}
+                comments = {comments}
+                setComments = {setComments}
             />
         </Card>
 
@@ -76,8 +82,8 @@ function CreatePostModal(props){
                 </div>
 
                 <h5>Reply to this post</h5>
-                <AddComments addComments = {post.addComment} />
-                <Comments comments = {post.comments}/>
+                <AddComments addComments = {post.addComment} postId={post._id} setComments={props.setComments}/>
+                <Comments postId = {post._id} comments={props.comments} setComments={props.setComments}/>
             </Modal.Body>
         </Modal>
     );
