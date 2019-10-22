@@ -170,3 +170,53 @@ Content: {'message': 'No posts found'}
 ````
     
 ## Comments
+
+#### GET comments
+
+**GET** - ``/api/posts/{_id}/comments`` <_Get only comments from specific post_>
+
+| URL Params  | Type   |  Description    | Required |
+|:----------- |:------ |:--------------- |:-------- |
+| id          | String | Post ObjectId   | Yes      |
+
+Error responses:
+````
+Code: 400
+Content: {'message': 'Invalid data'}
+````
+
+````
+Code: 400
+Content: {'message': 'Invalid ObjectId format'}
+````
+
+````
+Code: 500
+Content: {'message': 'Failed' , 'error': 'error message}
+````
+
+#### Create new comment
+
+**POST** - ``/api/posts/{_id}/comments`` <_Creates new comment into specific post_>
+
+| URL Params  | Type   |  Description    | Required |
+|:----------- |:------ |:--------------- |:-------- |
+| id          | String | Post ObjectId   | Yes      |
+
+Example data params :
+
+    {
+        'name': 'Anonymous',
+        'comment': 'Posting a new comment into post'
+    }
+
+Success response:
+
+    Code: 201
+    Content: {'message': 'Comment created successfully'}
+
+Error responses:
+````
+Code: 400
+Content: {'error': 'error message'}
+````

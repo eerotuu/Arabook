@@ -50,6 +50,7 @@ router.get('/:id/comments', function (req, res, next) {
             if (post !== null) {
                 res.json(post.comments);
             } else {
+                res.status(404);
                 res.json({message: 'not results found'});
             }
         })
@@ -57,6 +58,7 @@ router.get('/:id/comments', function (req, res, next) {
         if (err) {
             resFailed(res, err);
         } else {
+            res.status(400);
             res.json({message: 'Invalid ObjectId format'});
         }
     }
