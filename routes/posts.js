@@ -177,4 +177,19 @@ router.patch('/:id', function (req, res) {
     })
 });
 
+
+router.get('/search', function (req, res) {
+
+    let query = {
+        tags: new RegExp(req.query.tag, 'i'),
+        title: new RegExp(req.query.title, 'i')
+    };
+
+    db.post.find(query, function (err, result) {
+        if(err) resFailed(res, err);
+        res.json(result);
+    })
+});
+
+
 module.exports = router;

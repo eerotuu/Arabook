@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Post from './post.js'
+import Card from 'react-bootstrap/Card'
+import Tags from "./tags";
+import Button from "react-bootstrap/Button";
 
 class Posts extends Component {
 
@@ -11,12 +14,12 @@ class Posts extends Component {
     }
 
     componentDidMount() {
-        this.getList();
+        this.getList('/api/posts');
     }
 
     // fetch posts from api and set state
-    getList = () => {
-        fetch('/api/posts')
+    getList = (url) => {
+        fetch(url)
             .then(res => res.json())
             .then(postList => this.setState({ postList }))
     };
@@ -25,9 +28,15 @@ class Posts extends Component {
         const { postList } = this.state;
 
         // check if there are any posts to render
-        if(typeof postList == 'undefined' || postList.size === 0) {
+        console.log('postSize ', postList.length);
+        if(typeof postList == 'undefined' || postList.length === 0) {
             return (
-                <li>No posts yet</li>
+                <Card style={{marginBottom: "0.5em"}} className="text-center" >
+                    <Card.Body>
+                        <Card.Title>No posts found</Card.Title>
+                        <Card.Text>Try with other search</Card.Text>
+                    </Card.Body>
+                </Card>
             )
         }
 

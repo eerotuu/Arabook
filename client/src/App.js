@@ -10,16 +10,26 @@ import {Navbar, Form, FormControl, Button, Container, Modal} from 'react-bootstr
 function App() {
 
     const [modalShow, setModalShow] = React.useState(false);
+    const [searchText, setSearchText] = React.useState('');
     const childRef = useRef();
+
+    const handleChange = (event) => {
+        setSearchText(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        childRef.current.getList('/api/search?title=' + searchText + '&tag=' + searchText);
+    };
 
   return (
     <div style={{minWidth: 580}}>
 
         <Navbar bg="dark" variant="dark">
-            <Form inline className="justify-content-center" style={{width: "100%"}}>
+            <Form inline className="justify-content-center" style={{width: "100%"}} onSubmit={handleSubmit}>
                 <Button variant="outline-info" style={{marginRight: "0.5em"}} onClick={() => setModalShow(true)}>Create new post</Button>
-                <FormControl type="text" placeholder="Search" className="mr-sm-2" style={{width: "40%", minWidth: 300}} />
-                <Button variant="outline-info">Search</Button>
+                <FormControl name='searchText' value={searchText} onChange={handleChange} type="text" placeholder="Search" className="mr-sm-2" style={{width: "40%", minWidth: 300}} />
+                <Button type='submit' variant="outline-info">Search</Button>
             </Form>
         </Navbar>
 
@@ -33,7 +43,7 @@ function App() {
                 setModalShow(false);
             }}
             refreshList={() => {
-                childRef.current.getList();
+                childRef.current.getList('/api/posts');
             }}
         />
     </div>
