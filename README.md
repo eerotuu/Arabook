@@ -220,3 +220,15 @@ Error responses:
 Code: 400
 Content: {'error': 'error message'}
 ````
+
+#### Search
+
+**GET** - ``/api/search?{parameters}`` <_Search posts with specific parameters_>
+
+
+| URL Params  | Type   |  Description    |
+|:----------- |:------ |:--------------- |
+| title       | String | Post title      | 
+| tag         | String | Attached tags   | 
+
+Example: ``/api/search?title=Lorem&tag=usefull``
