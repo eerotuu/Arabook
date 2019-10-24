@@ -24,31 +24,40 @@ class AddComments extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        fetch('/api/posts/' + this.postId + '/comments', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.state)
-        }).then(function(response) {
-            return response.text()
-        }, function(error) {
-            console.log(error.message);
-        })
+        const request = async () => {
+            await
+            fetch('/api/posts/' + this.postId + '/comments', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.state)
+            }).then(function (response) {
+                //return response.text()
+            }, function (error) {
+                console.log(error.message);
+            })
 
-        fetch('/api/posts/' + this.postId + '/comments')
-            .then(res => res.json())
-            .then((result) => {
-                this.setComments(result);
-            },)
+            await
+            fetch('/api/posts/' + this.postId + '/comments')
+                .then(res => res.json())
+                .then((result) => {
+                    console.log('updating comments');
+                    this.setComments(result);
+                },);
+
+            this.setState({name: '', comment: ''});
+        }
+
+        request();
+
     }
-
     render() {
         return (
             <Card style={{marginBottom: "0.5em"}} >
                 <Card.Header>New Comment</Card.Header>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} id={"create-comment-form"}>
                 <Card.Body>
                 <Form.Group>
                     <Form.Label>Nickname</Form.Label>
@@ -57,7 +66,7 @@ class AddComments extends React.Component {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Comment</Form.Label>
-                    <Form.Control name="comment" type="text" placeholder="Comment" value={this.state.comment}
+                    <Form.Control name="comment" as="textarea" placeholder="Comment" value={this.state.comment}
                                   onChange={this.handleChange}/>
                 </Form.Group>
                 <Button type="submit">Reply</Button>

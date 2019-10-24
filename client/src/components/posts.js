@@ -19,6 +19,7 @@ class Posts extends Component {
 
     // fetch posts from api and set state
     getList = (url) => {
+        if(typeof url == 'undefined') url = '/api/posts';
         fetch(url)
             .then(res => res.json())
             .then(postList => this.setState({ postList }))

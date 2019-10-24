@@ -7,11 +7,6 @@ import Toast from "react-bootstrap/Toast";
 const Comments = ({postId, comments, setComments}) => {
 
 
-
-    const getList = () => {
-
-    };
-
     useEffect(() => {
         fetch('/api/posts/' + postId + '/comments')
             .then(res => res.json())

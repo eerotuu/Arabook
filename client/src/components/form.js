@@ -26,21 +26,26 @@ class PostForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.state.tags = this.state.tags.split(',');
-        fetch('/api/posts', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.state)
-        }).then(function(response) {
-            return response.text()
-        }, function(error) {
-            console.log(error.message);
-        })
-        this.hide();
-        this.refreshList();
+        const request = async () => {
+            this.state.tags = this.state.tags.split(',');
+            await fetch('/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.state)
+            }).then(function(response) {
+                return response.text()
+            }, function(error) {
+                console.log(error.message);
+            });
+            this.hide();
+            this.refreshList();
+        }
+
+        request();
+
     }
     render() {
         return (
