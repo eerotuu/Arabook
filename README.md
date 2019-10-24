@@ -111,10 +111,6 @@ Content: {'message': 'No posts found'}
 
 **POST** - ``/api/posts`` 
 
-| URL Params  | Type   |  Description    | Required |
-|:----------- |:------ |:--------------- |:-------- |
-| id          | String | ObjectId String | Yes      |
-
 Example data params :
 
     {
