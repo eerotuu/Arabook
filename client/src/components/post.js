@@ -37,8 +37,8 @@ const Post = ({post, getList}) => {
             <Card.Body>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Text>{post.text}</Card.Text>
+                <img src={post.image} alt="" style={{marginBottom: "1em"}}/><br />
                 <a href={post.link}>{post.link}</a>
-                <img src={post.image} alt="" style={{marginBottom: "1em"}}/>
                 <Tags tags={post.tags} />
                 <Button variant="primary" onClick={() => setModalShow(true)}>{commentsText}</Button>
             </Card.Body>
@@ -74,12 +74,10 @@ function CreatePostModal(props){
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>
-                    <div>{post.text}</div>
-                    <a href={post.link}>{post.link}</a>
-                    <img src={post.image} alt="" style={{marginBottom: "1em"}}/>
-                    <Tags tags={post.tags} />
-                </div>
+                <div>{post.text}</div>
+                <img src={post.image} alt="" style={{marginBottom: "1em"}}/><br />
+                <a href={post.link}>{post.link}</a>
+                <Tags tags={post.tags} />
 
                 <h5>Reply to this post</h5>
                 <AddComments addComments = {post.addComment} postId={post._id} setComments={props.setComments}/>

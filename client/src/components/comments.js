@@ -45,15 +45,19 @@ const Comment = ({c})=> {
         + (dateTime.getHours() - difference)+ ':' + String(dateTime.getMinutes()).padStart(2, "0");
 
     return(
-        <Toast>
-            <Toast.Header>
+        <div className="comment">
+            <div className="comment-header">
                 <strong className="mr-auto">{c.name}</strong>
                 <small>{dateString}</small>
-            </Toast.Header>
-            <Toast.Body>{c.comment}</Toast.Body>
-        </Toast>
+            </div>
+            <div className="comment-body">{c.comment}</div>
+        </div>
     )
 }
 
 
 export default Comments
+
+/*
+
+ */
